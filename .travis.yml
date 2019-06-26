@@ -1,0 +1,15 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t ngquangan/fib-calculator-client-test:latest -f ./client/Dockerfile.dev .
+
+script:
+  - docker run ngquangan/fib-calculator-client-test:latest npm test -- --coverage
+
+after_success:
+  - docker build -t ngquangan/fib-calculator-client ./client
+  - docker build -t ngquangan/fib-calculator-nginx ./nginx
+  - docker build -t ngquangan/fib-calculator-server ./server
+  - docker build -t ngquangan/fib-calculator-worker ./worker
